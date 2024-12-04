@@ -36,26 +36,11 @@ SELECT emp_id, emp_name, salary, salary*12 AS 연봉 FROM employee;
 -- employee 테이블에서 EMP_ID AS 직원아이디, EMP_NAME = 직원이름, SALARY = 월급으로 표기해서 출력
 SELECT EMP_ID AS 직원아이디, EMP_NAME AS 직원이름, SALARY AS 월급 FROM employee;
 
-/*SYSDATE      STSRIMESTAMP*/
---(시스템이 나타내고 있는) 현재 시간
-
--- SYSDATE       : 현재 시간(년, 월, 일, 시, 분, 초) 조회
--- STSRIMESTAMP  : 현재 시간(년, 월, 일, 시, 분, 초, ms + 지역(local)) 조회
-
-/*DUAL *DYmmy tABLe) 가짜 테이블*/
--- 기능이나 단순 데이터 조회를 위해 SQL에서 제공하는 존재하지 않는 가짜 테이블
 
 -- 가짜 테이블을 이용해서 시간 기능 조회하기
 SELECT SYSDATE FROM DUAL; -- 24/12/04
 
 SELECT SYSTIMESTAMP FROM DUAL; --24/12/04 14:29:25.680000000 +09:00
-
-/*
-날짜 데이터 연산하기 (+, - 만 가능)
-→ +1 == 1일 추가
-→ -1 == 1일 감소
-→ 일 단위로 계산
-*/
 
 -- 가짜 테이블을 이용해서 AS 어제, AS 현재, AS 내일,  AS모레 조회
 SELECT SYSDATE-1 AS 어제, SYSDATE AS 현재, SYSDATE+1 AS 내일, SYSDATE+2 AS 모레 FROM DUAL;
@@ -74,25 +59,6 @@ SELECT '2024-12-04', TO_DATE('2024-12-04', 'YYYY-MM-DD') FROM DUAL;
 -- EMPLOYEE 에서 모든 사원의 이름, 입사일 근무 일수(SYSDATE - 입사일) 조회
 SELECT EMP_NAME, HIRE_DATE, SYSDATE - HIRE_DATE FROM employee;
 
-/*
-3. SELECT 특정 기준에 부합한 컬럼을 조회
-
-SELECT 조회할 컬럼명
-FROM 테이블명
-WHERE 조건작성;
-
-WHERE에서 존재 유무 확인
-IS NOT NULL = 빈 값이 아닌 칸
-ex) 이름이 비어있는 사원 조회
-    select emp_name
-    from employee
-    where emp_name is null;
-    
-    이름이 비어있지 않은 사원 조회
-    select emp_name
-    from employee
-    where emp_name is not null;
-*/
 
 -- 퇴사여부 Y 인 사원의 이름과 퇴사일 조회
 SELECT EMP_NAME, ENT_DATE -- 무엇을 조회할 것인가
@@ -161,19 +127,36 @@ FROM employee
 WHERE DEPT_CODE !='D3'
 AND DEPT_CODE !='D1';
 
-/*
-WHERE 절에서 특정 값에 기준을 설정할 때 특정 값의 범위나 조건을 설정
-
-AND = 여러조건을 동시에 만족하는 경우로 AND로 작성한 조건이 모두 TRUE이어야 함
-OR  = 하나의 조건만 TRUE이어도 해당 행이 선택
-
-IN() = 조건에 여러 값을 지정할 때 사용/ 값의 목록 중 하나와 일치하는 행을 선택
-       OR의 간결한 표현 방법
-NOT IN() = IN과 반대로, 조건에서 지정한 목록에 포함되지 않는 값만 선택
-           값의 목록과 일치하지 않는 행만 선택
-*/
 
 -- EMPLOYEE 테이블에서 부서코드가 D1 D3가 아닌 사원 조회
 SELECT EMP_NAME, DEPT_CODE
 FROM employee
 WHERE DEPT_CODE NOT IN('D1', 'D3');
+
+-- D5 부서에 속한 사원의 사원번호 사원이름 부서코드 조회
+SELECT EMP_NO, EMP_NAME, DEPT_CODE
+FROM employee
+WHERE dept_code = 'D5';
+
+-- 입사일이 (HIRE_DATE) 2000년 이후인 직원들의 정보 조회 EMPLOYEE
+SELECT *
+FROM employee
+WHERE hire_date >= TO_DATE('2000-01-01', 'YYYY-MM-DD');
+
+-- EMPLOYEE 테이블에서 퇴직여부가 'Y'이고, 퇴사일이 2015년 이후인 직원들의 정보를 조회
+SELECT *
+FROM employee
+WHERE ent_yn = 'Y'
+AND ent_date >= TO_DATE('2015-01-01', 'YYYY-MM-DD');
+
+-- EMPLOYEE 테이블에서 성씨가 '전' 씨인 사원의 이름 조회
+SELECT EMP_NAME
+FROM employee
+WHERE EMP_NAME
+LIKE '전%';
+
+-- EMPLOYEE 테이블에서 이름이 수로 끝나는 사원의 이름 조회
+SELECT EMP_NAME
+FROM employee
+WHERE emp_name
+LIKE '%수';
