@@ -27,10 +27,17 @@ WHERE SALARY >= 2500000
 AND BONUS >= 0.2;
 
 -- 7. EMPLOYEE 테이블에서 JOB_CODE가 'J6'이거나 'J7'인 직원들의 정보를 조회하세요.
+/*
 SELECT *
 FROM employee
 WHERE JOB_CODE = 'J6'
 OR JOB_CODE = 'J7';
+*/
+
+SELECT * 
+FROM EMPLOYEE 
+WHERE JOB_CODE IN ('J6', 'J7');
+
 
 -- 8. DEPARTMENT 테이블에서 DEPT_TITLE에 '영업'이라는 단어가 포함된 부서를 조회하세요.
 SELECT *
@@ -115,11 +122,9 @@ WHERE EMP_NAME
 LIKE '이%';
 
 -- 22. EMPLOYEE 테이블에서 JOB_CODE가 'J'로 시작하고 두 번째 문자가 '1'인 직원을 조회하세요.
-SELECT *
-FROM employee
-WHERE JOB_CODE
-LIKE 'J%'
-AND JOB_CODE LIKE '%1';
+SELECT * 
+FROM EMPLOYEE 
+WHERE JOB_CODE LIKE 'J1%';
 
 -- 23. EMPLOYEE 테이블에서 EMAIL이 'com'으로 끝나는 직원들의 정보를 조회하세요.
 SELECT *
