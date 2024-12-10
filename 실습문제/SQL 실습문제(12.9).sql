@@ -223,9 +223,9 @@ FROM DEPARTMENT D
 WHERE D.DEPT_ID = (SELECT E2.DEPT_CODE FROM EMPLOYEE E2 WHERE EMP_NAME = '노옹철');
 
 --2. 문제: J2 직급의 평균 급여보다 높은 급여를 받는 사원의 이름과 급여를 조회하세요.
-SELECT EMP_NAME, SALARY
+SELECT E.EMP_NAME, E.SALARY
 FROM EMPLOYEE E
-WHERE SALARY > (SELECT FLOOR(AVG(SALARY)) FROM EMPLOYEE E2 WHERE JOB_CODE = 'J2');
+WHERE E.SALARY > (SELECT FLOOR(AVG(E2.SALARY)) FROM EMPLOYEE E2 WHERE E2.JOB_CODE = 'J2');
 
 --3. 문제: 지역코드 L1에 속한 부서에서 근무하는 사원의 이름을 조회하세요.
 SELECT E.EMP_NAME
@@ -238,11 +238,11 @@ FROM EMPLOYEE EM
 WHERE MANAGER_ID IS NOT NULL;
 
 --5. 문제: 부서 코드가 D5인 부서에서 가장 높은 급여를 받는 사원의 이름과 급여를 조회하세요.
-SELECT EMP_NAME, SALARY
-FROM EMPLOYEE
-WHERE SALARY = (SELECT MAX(SALARY) 
-              FROM EMPLOYEE
-              WHERE DEPT_CODE = 'D5');
+SELECT EM.EMP_NAME, EM.SALARY
+FROM EMPLOYEE EM
+WHERE EM.SALARY = (SELECT MAX(ES.SALARY) 
+              FROM EMPLOYEE ES
+              WHERE ES.DEPT_CODE = 'D5');
 
 --6. 문제: 퇴사 여부가 N인 사원 중 가장 적은 급여를 받는 사원의 이름과 급여를 조회하세요.
 SELECT EMP_NAME, SALARY
@@ -257,3 +257,18 @@ WHERE HIRE_DATE = (SELECT MIN(HIRE_DATE) FROM EMPLOYEE E2 WHERE DEPT_CODE='D8');
 --8. 문제: 전 사원의 최대 급여와 최소 급여를 조회하세요.
 SELECT (SELECT MAX(E1.SALARY) FROM EMPLOYEE E1)AS 최대급여, (SELECT MIN(E.SALARY) FROM EMPLOYEE E)AS 최소급여
 FROM DUAL;
+/*
+  SELECT MAX(E1.SALARY) FROM EMPLOYEE E1 = EMPLOYEE 테이블에서 가장 높은 급여 조회
+  SELECT MIN(E.SALARY) FROM EMPLOYEE E = EMPLOYEE 테이블에서 가장 낮은 급요 조회
+  
+  DUAL TABLE = 테이블이 없는 가상의 테이블 DUmmy tAbLe
+  --Oracle에서만 제공되는 특수 테이블로 Oracle은 FROM을 생략할 수 없기 때문에 DUAL이라는 테이블을 사용
+  
+  다른 SQL에서는 FROM 테이블 이름이 없어도 조회 가능
+  
+  예를 들어
+  현재시간 표현하는 쿼리
+  ORACLE SQL : SELECT SYSDATE FROM DUAL;
+  ORACLE 이외 SQL : SELECT SYSDATE;  
+*/
+
