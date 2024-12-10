@@ -151,12 +151,27 @@ WHERE CAFE_ID= '12';
 SELECT * FROM EATS_MENU EM;
 
 UPDATE EATS_MENU
-SET PRICE = '6000'
+SET PRICE = 6000
 WHERE MENU_NAME = '화이트 모카';
 
 -- EATS MENU 테이블에서 MENU_NAME이 '밀크티'인 메뉴의 설명을 "홍차와 우유가 어우러진 진한 맛"
 -- 메뉴 이름 = "밀크티"인 항목만 수정
 
+UPDATE EATS_MENU
+SET DESCRIPTION = '홍차와 우유가 어우러진 진한 맛'
+WHERE MENU_NAME = '밀크티';
+
 -- EATS_MENU 테이블에서 PRICE가 5500원 이하인 모든 메뉴의 가격을 10% 인상하여 업데이트
 -- PRICE가 5500원 이하인 메뉴만 수정
 -- SET(PRICE = PRICE *1.1)
+
+UPDATE EATS_MENU
+SET PRICE = PRICE *1.1
+WHERE PRICE <= 5500;
+
+SELECT * FROM EATS;
+-- 그린빈 카페 서울시 종로구 010-2345-6789 에서 경기도 안양시로 주소 변경 전화번호 제거
+-- 제거 = NULL
+UPDATE EATS
+SET LOCATION = '경기도 안양시', CONTACT_NUMBER = NULL
+WHERE CAFE_NAME = '그린빈 카페';
