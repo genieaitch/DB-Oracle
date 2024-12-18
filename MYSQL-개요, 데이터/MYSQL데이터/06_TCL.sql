@@ -36,7 +36,7 @@ EX)
 
 
 /*
-트랜잭션
+트랜잭션 ACID
 Atomicity(원자성) : 트랜잭션에 포함된 작업이 모두 성공하거나 실패해야함
 	               중간에 일부만 실행X
 		            예) 은행 송금 시, 계좌 A에서 돈이 빠져나갔는데 계좌 B에 입금이 안되면 안되기 때문에 둘 중 하나만 실행할 수 없다
@@ -52,3 +52,20 @@ Durability(지속성) : 트랜잭션이 완료된 후의 결과는 영구적으�
 		예) 시스템이 갑자기 다운되어도 성공적으로 완료된 거래 결과는 유지되어야함
 			은행에서 5만원 송금 후 서비스 점검으로 1시간 후 계좌 확인을 했을 때 송금 내역이 존재해야함
 */
+
+SELECT * FROM khtuser.USER;
+-- USER PHONE 앞에 작성된 KOR) 제거
+SET SQL_SAFE_UPDATES = 0; -- 안전모드 종료
+
+START TRANSACTION; -- savepoint를 사용하기 위해서는 START TRANSACTION 시작 수동 제어
+SAVEPOINT SP1; -- 임시로 되돌릴 위치 이름 SP1 설정
+USE KHTUSER; -- KHTUSER DB로 접속
+
+UPDATE USER SET PHONE = SUBSTRING_INDEX(PHONE, ')', 1); -- 수정할 UPDATE 작성
+SELECT * FROM USER; -- 제대로 수정했는지 확인
+
+ROLLBACK TO SP1; -- 원하는대로 결과 수정x SP1 임시저장한 위치로 되돌리기
+UPDATE USER SET PHONE = SUBSTRING_INDEX(PHONE, ')', -1); -- 수정
+SELECT * FROM USER;
+
+COMMIT; -- 수정 결과 저장
